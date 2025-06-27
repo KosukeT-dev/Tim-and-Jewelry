@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim and Jewelry - オープニング</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin: 3rem 2rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .characters-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .characters-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .characters {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .character {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 160px;
+        }
+
+        .character:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .character img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 1rem;
+        }
+
+        .howto-section {
+            margin-bottom: 2.5rem;
+            text-align: left;
+            background: rgba(103, 126, 234, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .howto-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .howto-content {
+            font-size: 1rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .game-modes {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mode-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1.2rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: block;
+        }
+
+        .mode-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+        }
+
+        .mode-button:active {
+            transform: translateY(0);
+        }
+
+        .mode-button.chase {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .mode-button.chase:hover {
+            background: linear-gradient(135deg, #ff5252 0%, #e53e3e 100%);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .mode-button.escape {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .mode-button.escape:hover {
+            background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
+        }
+
+        /* アニメーション */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .game-container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            .characters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .character {
+                min-width: 100px;
+            }
+
+            .howto-section {
+                padding: 1rem;
+            }
+
+            .mode-button {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .game-container {
+                padding: 1rem;
+            }
+
+            .characters-title, .howto-title {
+                font-size: 1.3rem;
+            }
+
+            .howto-content {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="title">Tim and Jewelry</h1>
+        <p class="subtitle">エンドレスランナーゲーム</p>
+        
+        <div class="characters-section">
+            <h2 class="characters-title">登場人物</h2>
+            <div class="characters">
+                <div class="character">
+                    <img src="images/Tim.png" alt="ティム" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="character-name">ティム</span>
+                </div>
+                <div class="character">
+                    <img src="images/Jewelry.png" alt="ジュエリー" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="character-name">ジュエリー</span>
+                </div>
+                <div class="character">
+                    <img src="images/cactus.png" alt="サボテン" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="character-name">サボテン</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="howto-section">
+            <h2 class="howto-title">遊び方</h2>
+            <div class="howto-content">
+                <p>• サボテンを避けながら走り続けるエンドレスランナーゲームです</p>
+                <p>• 2つのモードから選んで遊べます：</p>
+                <p>　- <strong>追いかけモード</strong>：ティムがジュエリーを追いかけます</p>
+                <p>　- <strong>逃げるモード</strong>：ジュエリーがティムから逃げます(準備中)</p>
+                <p>• 障害物に当たらないように注意してハイスコアを目指しましょう！</p>
+            </div>
+        </div>
+
+        <div class="game-modes">
+            <a href="tim-chases-the-jewelry.html" class="mode-button chase">
+                🏃‍♂️ ティムがジュエリーを追いかけるモード
+            </a>
+            <a href="jewelry-escapes-from-tim.html" class="mode-button escape">
+                💎 ジュエリーがティムから逃げるモード
+            </a>
+        </div>
+    </div>
+</body>
+</html>
