@@ -239,7 +239,8 @@
       y: canvas.height - 200,
       width: 40,
       height: 40,
-      speed: 2
+      speed: 2,
+      visible: false   // ← visible フラグ追加
     };
 
     let obstacles = [];
@@ -250,7 +251,6 @@
     const images = {};
     const audio = {};
 
-    // 画像読み込み
     function loadImage(src) {
       const img = new Image();
       img.src = src;
@@ -269,30 +269,22 @@
     soundEffects.star.volume = 0.5;
     soundEffects.jewelry.volume = 0.5;
 
-    // ===== BGM制御用変数 =====
     let bgmAudio = null;
 
-    // BGM再生の試行
     function tryPlayBGM() {
       bgmAudio = new Audio('audios/bgm.mp3');
       bgmAudio.loop = true;
       bgmAudio.volume = 0.3;
-      bgmAudio.play().catch(() => {
-        // BGMが再生できない場合は無視
-      });
+      bgmAudio.play().catch(() => { });
       return bgmAudio;
     }
 
-    // ジャンプ音の再生
     function playJumpSound() {
       const jumpSound = new Audio('audios/jump.mp3');
       jumpSound.volume = 0.5;
-      jumpSound.play().catch(() => {
-        // 効果音が再生できない場合は無視
-      });
+      jumpSound.play().catch(() => { });
     }
 
-    // 入力処理
     document.addEventListener('keydown', (e) => {
       if ((e.code === 'Space' || e.key === ' ') && gameRunning) {
         e.preventDefault();
@@ -300,7 +292,6 @@
       }
     });
 
-    // タッチ操作
     canvas.addEventListener('touchstart', (e) => {
       e.preventDefault();
       if (gameRunning) {
@@ -308,7 +299,6 @@
       }
     });
 
-    // クリック操作
     canvas.addEventListener('click', (e) => {
       if (gameRunning) {
         jump();
@@ -323,7 +313,6 @@
       }
     }
 
-    // 障害物とスターの生成
     function spawnObstacle() {
       if (Math.random() < 0.029) {
         obstacles.push({
@@ -345,7 +334,6 @@
       }
     }
 
-    // 当たり判定
     function checkCollision(rect1, rect2) {
       return rect1.x < rect2.x + rect2.width &&
         rect1.x + rect1.width > rect2.x &&
@@ -353,7 +341,6 @@
         rect1.y + rect1.height > rect2.y;
     }
 
-    // パーティクル効果
     function createParticles(x, y, color) {
       for (let i = 0; i < 8; i++) {
         particles.push({
@@ -367,13 +354,11 @@
       }
     }
 
-    // ゲームループ
     function gameLoop() {
       if (!gameRunning) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 背景描画
       const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.6);
       skyGradient.addColorStop(0, '#87CEEB');
       skyGradient.addColorStop(1, '#E0F6FF');
@@ -388,7 +373,6 @@
 
       frameCount++;
 
-      // Tim の走りアニメーション
       if (!tim.jumping) {
         tim.animationFrame += 0.3;
         tim.bobOffset = Math.sin(tim.animationFrame) * 3;
@@ -396,7 +380,6 @@
         tim.bobOffset = 0;
       }
 
-      // ティムの物理演算
       tim.velocityY += 0.8;
       tim.y += tim.velocityY;
 
@@ -406,27 +389,26 @@
         tim.jumpCount = 0;
       }
 
-      // ジュエリーの動き
-      jewelry.x -= jewelry.speed;
-      if (jewelry.x < -jewelry.width) {
-        jewelry.x = canvas.width + Math.random() * 200;
+      // ジュエリーの動き（visible フラグで制御）
+      if (jewelry.visible) {
+        jewelry.x -= jewelry.speed;
+        if (jewelry.x < -jewelry.width) {
+          jewelry.x = canvas.width + Math.random() * 200;
+        }
       }
 
-      // 障害物の更新
       spawnObstacle();
       obstacles = obstacles.filter(obstacle => {
         obstacle.x -= gameSpeed + 2;
         return obstacle.x > -obstacle.width;
       });
 
-      // スターの更新
       spawnStar();
       stars = stars.filter(star => {
         star.x -= gameSpeed + 2;
         return star.x > -star.size;
       });
 
-      // 当たり判定
       obstacles.forEach(obstacle => {
         if (checkCollision(tim, obstacle)) {
           createParticles(tim.x + tim.width / 2, tim.y + tim.height / 2, '#FF6B6B');
@@ -434,7 +416,6 @@
         }
       });
 
-      // スター収集
       stars = stars.filter(star => {
         if (checkCollision(tim, {
           x: star.x - star.size,
@@ -452,21 +433,18 @@
         return true;
       });
 
-      // ジュエリーに追いついた判定
-      if (checkCollision(tim, jewelry)) {
+      if (jewelry.visible && checkCollision(tim, jewelry)) {
         createParticles(jewelry.x + jewelry.width / 2, jewelry.y + jewelry.height / 2, '#FFD700');
         soundEffects.jewelry.currentTime = 0;
         soundEffects.jewelry.play().catch(() => { });
         endGame('ジュエリーに追いつきました！', true);
       }
 
-      // スコア更新
       score += Math.floor(gameSpeed);
       if (score >= 3000) {
         endGame('スコア3000を超えました！');
       }
 
-      // パーティクル更新
       particles = particles.filter(particle => {
         particle.x += particle.vx;
         particle.y += particle.vy;
@@ -474,7 +452,6 @@
         return particle.life > 0;
       });
 
-      // 描画
       if (images.tim.complete) {
         const drawY = tim.y + tim.bobOffset;
         if (!tim.jumping) {
@@ -488,7 +465,7 @@
         }
       }
 
-      if (images.jewelry.complete) {
+      if (images.jewelry.complete && jewelry.visible) {
         ctx.drawImage(images.jewelry, jewelry.x, jewelry.y, jewelry.width, jewelry.height);
       }
 
@@ -498,7 +475,6 @@
         }
       });
 
-      // スター描画
       stars.forEach(star => {
         ctx.fillStyle = '#FFD700';
         ctx.beginPath();
@@ -525,7 +501,6 @@
       requestAnimationFrame(gameLoop);
     }
 
-    // ゲーム開始
     function startGame() {
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('gameOverScreen').style.display = 'none';
@@ -543,6 +518,7 @@
       tim.animationFrame = 0;
       tim.bobOffset = 0;
 
+      jewelry.visible = false;
       jewelry.x = canvas.width + 200;
       jewelry.y = canvas.height - 200;
       jewelry.speed = 2;
@@ -553,10 +529,14 @@
 
       tryPlayBGM();
 
+      // ジュエリーを8秒後に登場させる
+      setTimeout(() => {
+        jewelry.visible = true;
+      }, 8000);
+
       gameLoop();
     }
 
-    // ゲーム終了
     function endGame(reason, isWin = false) {
       gameRunning = false;
 
@@ -573,19 +553,16 @@
       document.getElementById('gameOverScreen').style.display = 'flex';
     }
 
-    // ゲーム再開
     function restartGame() {
       startGame();
     }
 
-    // スタート画面に戻る
     function showStartScreen() {
       document.getElementById('gameOverScreen').style.display = 'none';
       document.getElementById('startScreen').style.display = 'flex';
       updateRanking();
     }
 
-    // スコア保存
     let savedScores = [];
 
     function saveScore(newScore, isWin = false) {
@@ -615,7 +592,6 @@
       }
     }
 
-    // 初期化
     window.addEventListener('load', () => {
       resizeCanvas();
       updateRanking();
