@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,10 +178,33 @@
             box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
         }
 
+        .coconala-button {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 20px;
+            background-color: #ff6f61;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .coconala-button:hover {
+            background-color: #e65c50;
+        }
+
         /* アニメーション */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* レスポンシブデザイン */
@@ -222,7 +246,8 @@
                 padding: 1rem;
             }
 
-            .characters-title, .howto-title {
+            .characters-title,
+            .howto-title {
                 font-size: 1.3rem;
             }
 
@@ -232,24 +257,28 @@
         }
     </style>
 </head>
+
 <body>
     <div class="game-container">
         <h1 class="title">Tim and Jewelry</h1>
         <p class="subtitle">エンドレスランナーゲーム</p>
-        
+
         <div class="characters-section">
             <h2 class="characters-title">登場人物</h2>
             <div class="characters">
                 <div class="character">
-                    <img src="images/Tim.png" alt="ティム" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="images/Tim.png" alt="ティム"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <span class="character-name">ティム</span>
                 </div>
                 <div class="character">
-                    <img src="images/Jewelry.png" alt="ジュエリー" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="images/Jewelry.png" alt="ジュエリー"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <span class="character-name">ジュエリー</span>
                 </div>
                 <div class="character">
-                    <img src="images/cactus.png" alt="サボテン" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="images/cactus.png" alt="サボテン"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <span class="character-name">サボテン</span>
                 </div>
             </div>
@@ -273,7 +302,12 @@
             <a href="jewelry-escapes-from-tim.html" class="mode-button escape">
                 💎 ジュエリーがティムから逃げるモード
             </a>
+            <a href="https://coconala.com/services/3406852" target="_blank" rel="noopener noreferrer"
+                class="coconala-button">
+                ココナラで販売中のサービスを見る
+            </a>
         </div>
     </div>
 </body>
+
 </html>
